@@ -1,0 +1,409 @@
+openapi: 3.0.0
+info:
+  title: 数字营销电商订单管理平台
+  description: 数字营销电商订单管理平台自动生成api文档v1。除登录外的所有接口，共有参数，token：登录的时候回返回，项目集团内部是用，不做签名验证，共有参数可以放到header也可以放到参数中
+  termsOfService: 'http://newairtek.com'
+  contact:
+    name: Leon
+    email: 470974216@qq.com
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: '1.0'
+servers:
+  -
+    url: /api/v1
+    description: 'php resetful'
+paths:
+  .login/signin:
+    post:
+      tags:
+        - admin
+      summary: 登录接口
+      operationId: 'app\api\controller\v1\Login::signin'
+      requestBody:
+        description: 'username:登录名|邮件|手机号；password:密码,返回数据：status: 1:正常，其它禁止登录；ava.path:头像，token:本地保存，保存期限有token_valid_time确定单位秒，'
+        content:
+          application/json:
+            schema:
+              example:
+                username: admin
+                password: admin
+      responses:
+        '200':
+          description: 正常；请求已完成
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .upload/:
+    post:
+      tags:
+        - admin
+      summary: 上传文件
+      operationId: 'app\api\controller\v1\Upload::index'
+      requestBody:
+        description: 'file:上传的文件,type:crop 裁切，如果不裁切，可以不传或者传空，只有图片可以裁切。sub_key:子目录，0：没有子目录，1：头像文件相关目录，2：普通图片相关目录，3：订单附件相关目录，oss:是否直接上传到OSS服务器，后期扩展使用'
+        content:
+          application/json:
+            schema:
+              example:
+                file: 上传的文件
+                sub_key: '1'
+                oss: '0'
+                token: ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjFhV1FpT2pFc0luUnBiV1VpT2pFMU9EUTFNakE0TWpGOS4weFdTWUpHVEVwVERCQWRNX1d1d0tTN2xLQ3dMZHhueGZGaTh4WlpudkZN
+                timestamp: '1511234567'
+      responses:
+        '200':
+          description: 正常；请求已完成
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/:
+    get:
+      tags:
+        - admin
+      summary: 获取用户列表
+      operationId: 'app\api\controller\v1\User::index'
+      parameters:
+        -
+          name: token
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjFhV1FpT2pFc0luUnBiV1VpT2pFMU9EUTFNakE0TWpGOS4weFdTWUpHVEVwVERCQWRNX1d1d0tTN2xLQ3dMZHhueGZGaTh4WlpudkZN
+        -
+          name: ''
+          in: query
+          description: 登录名
+          schema:
+            type: string
+            default: ''
+        -
+          name: nickname
+          in: query
+          description: 昵称
+          schema:
+            type: string
+            default: ''
+        -
+          name: email
+          in: query
+          description: 邮箱
+          schema:
+            type: string
+            default: ''
+        -
+          name: mobile
+          in: query
+          description: 手机号
+          schema:
+            type: string
+            default: ''
+        -
+          name: 'create_time[]'
+          in: query
+          description: 创建时间，传入数组，第一个元素为开始时间，第二个为结束时间
+          schema:
+            type: Array
+            default:
+              - '2020-03-17'
+              - '2020-03-19'
+        -
+          name: sort_key
+          in: query
+          description: 排序字段，凡使返回的属性都可以作为排序的key
+          schema:
+            type: string
+            default: id
+        -
+          name: sort_type
+          in: query
+          description: '排序类型--1:降序，2：升序'
+          schema:
+            type: number
+            default: '1'
+      responses:
+        '200':
+          description: 正常；请求已完成
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {  }
+              example: []
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/all:
+    get:
+      tags:
+        - admin
+      summary: 获取全部管理用户列表无分页，做下拉选择使用
+      operationId: 'app\api\controller\v1\User::all'
+      parameters:
+        -
+          name: token
+          in: query
+          description: ''
+          schema:
+            type: string
+            default: ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjFhV1FpT2pFc0luUnBiV1VpT2pFMU9EUTFNakE0TWpGOS4weFdTWUpHVEVwVERCQWRNX1d1d0tTN2xLQ3dMZHhueGZGaTh4WlpudkZN
+        -
+          name: username
+          in: query
+          description: 登录名
+          schema:
+            type: string
+            default: ''
+        -
+          name: nickname
+          in: query
+          description: 昵称
+          schema:
+            type: string
+            default: ''
+        -
+          name: email
+          in: query
+          description: 邮箱
+          schema:
+            type: string
+            default: ''
+        -
+          name: mobile
+          in: query
+          description: 手机号
+          schema:
+            type: string
+            default: ''
+        -
+          name: 'create_time[]'
+          in: query
+          description: 创建时间，传入数组，第一个元素为开始时间，第二个为结束时间
+          schema:
+            type: Array
+            default:
+              - '2020-03-17'
+              - '2020-03-19'
+        -
+          name: sort_key
+          in: query
+          description: 排序字段，凡使返回的属性都可以作为排序的key
+          schema:
+            type: string
+            default: id
+        -
+          name: sort_type
+          in: query
+          description: '排序类型--1:降序，2：升序'
+          schema:
+            type: number
+            default: '1'
+      responses:
+        '200':
+          description: 正常；请求已完成
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {  }
+              example: []
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/save:
+    post:
+      tags:
+        - admin
+      summary: 用户添加
+      operationId: 'app\api\controller\v1\User::save'
+      requestBody:
+        description: 'username:登录名，可用于户登录，不可重复；nickname:昵称；password:密码，email :邮箱，可用于用户登录不可重复，avatar:头像，通过上传文件接口返回的图片ID，role:角色,mobile:手机号，可用于用户登录，不可重复'
+        content:
+          application/json:
+            schema:
+              example:
+                username: kefu
+                nickname: 客服
+                password: newairtek@2019
+                email: newairtek@126.com
+                avatar: '1'
+                role: '1'
+                mobile: '15154197763'
+      responses:
+        '200':
+          description: 正常；请求已完成
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/read:
+    get:
+      tags:
+        - admin
+      summary: 读取单个用户
+      operationId: 'app\api\controller\v1\User::read'
+      parameters:
+        -
+          name: id
+          in: query
+          description: ''
+          schema:
+            type: number
+            default: 4
+            minimum: 1
+      responses:
+        '200':
+          description: 正常；请求已完成
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {  }
+              example: []
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/update:
+    post:
+      tags:
+        - admin
+      summary: 用户编辑
+      operationId: 'app\api\controller\v1\User::update'
+      requestBody:
+        description: 'nickname:昵称；email :邮箱，mobile:手机号，status 1:可正常登录，2：禁止登陆，avatar:头像,通过附件返回的ID，role:角色'
+        content:
+          application/json:
+            schema:
+              example:
+                id: '4'
+                nickname: 客服
+                email: newairtek@126.com
+                mobile: '15154197763'
+                avatar: '1'
+                role: '1'
+                first_name: leon
+                last_name: hu
+                qq: '4170974216'
+                wechart: leon_2342
+                gender: 男
+                status: '1'
+      responses:
+        '200':
+          description: 正常；请求已完成
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/delete:
+    get:
+      tags:
+        - admin
+      summary: 删除用户
+      operationId: 'app\api\controller\v1\User::delete'
+      parameters:
+        -
+          name: id
+          in: query
+          description: ''
+          schema:
+            type: number
+            default: 9
+            minimum: 1
+      responses:
+        '200':
+          description: 正常；请求已完成
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {  }
+              example: []
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+  .user/logout:
+    post:
+      tags:
+        - admin
+      summary: 登出接口
+      operationId: 'app\api\controller\v1\User::logout'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              example:
+                token: ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjFhV1FpT2pFc0luUnBiV1VpT2pFMU9EUTFNVGt4TmpCOS5iNjF3cEFoUFFVWE9FdnhtZ0dmUF9jaWFkNm9OUmlZcTRYRUtJNXRCajl3
+      responses:
+        '200':
+          description: 正常；请求已完成
+        '204':
+          description: '正常；无响应 — 已接收请求，但不存在要回送的信息'
+        '302':
+          description: '已找到 — 请求的数据临时具有不同 URI'
+        '401':
+          description: '未授权 — 未授权客户机访问数据'
+        '404':
+          description: '找不到 — 服务器找不到给定的资源；文档不存在'
+        '500':
+          description: 服务器错误
+tags:
+  -
+    name: admin
+    description: 后台相关的接口
