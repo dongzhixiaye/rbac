@@ -341,7 +341,7 @@ class User extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminUser');
             }catch (ValidateException $e){
-                return $this->json($e->getError(),401);
+                return $this->json("",$e->getError(),401);
             }
             $data['status']=1;
             $obj=\app\api\model\AdminUser::create($data);
@@ -483,23 +483,30 @@ class User extends \app\api\controller\Auto
     {
         if($request->isPost()){
             $data=$request->post();
-            $result = $this->validate($data, 'User.edit');
-
             try{
                 $this->validate($data, 'AdminUser.edit');
             }catch (ValidateException $e){
-                return $this->json($e->getError(),401);
+                return $this->json("",$e->getError(),401);
             }
-
-            if (true !== $result) return $this->json('',401,$result);
-            $affect=\app\api\model\AdminUser::update($data,'',true);
+            if(!$id) return $this->json("","重要参数丢失",401);
+            if(isset($data['username'])) unset($data['username']);
+            if(isset($data['password'])) unset($data['password']);
+            if(isset($data['order_count'])) unset($data['order_count']);
+            $email=$data['email'];
+            $mobile=$data['mobile'];
+            $have_id=AdminUser::where('id','<>',$id)->where(function($query) use ($email,$mobile){
+                $query->where('email','=',$email)->whereOr('mobile','=',$mobile);
+            })->column('id');
+//            $have_id=AdminUser::where([[['id','=',$id]],[['email','=',$data['email']],['mobile','=',$data['mobile']]]])->column('id');
+            if($have_id) return $this->json("","邮箱或者手机号有重复，请按照真实信息填写",401);
+            $affect=\app\api\model\AdminUser::update($data);
             if($affect!==false){
-                return $this->json("",'',lang("update_success"));
+                return $this->json("",'',"操作成功");
             }else{
-                return $this->json("",'',lang("update_failure"));
+                return $this->json("",'',"操作失败");
             }
         }else{
-            return $this->json('',403,lang("access_denied"));
+            return $this->json('',403,"访问被拒绝");
         }
     }
 

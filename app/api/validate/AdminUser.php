@@ -39,5 +39,5 @@ class AdminUser extends Validate
         'mobile.unique' => '手机不能重复',
         'nickname' => '昵称不能为空',
     ];
-    protected $scene=['login'=>['username.require','password'],'edit'=>['first_name','last_name'],'teacher'=>["email"]];
+    protected $scene=['login'=>['username.require','password'],'edit'=>['email.require','mobile.require','nickname.require']];
 }
