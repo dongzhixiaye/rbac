@@ -440,7 +440,7 @@ class User extends \app\api\controller\Auto
      *         @OA\MediaType(
      *             mediaType="application/json",
      *             @OA\Schema(
-     *                 example={"id":2,"nickname":"客服","email":"newairtek@126.com","mobile":"15154197763","avatar"="1","role":"1","first_name":"","last_name":"","qq":"4170974216","wechart":"leon_2342","gender":"男","status"=>1}
+     *                 example={"id":"4","nickname":"客服","email":"newairtek@126.com","mobile":"15154197763","avatar"="1","role":"1","first_name":"leon","last_name":"hu","qq":"4170974216","wechart":"leon_2342","gender":"男","status":"1"}
      *             )
      *         ),
      *
