@@ -341,7 +341,7 @@ class User extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminUser');
             }catch (ValidateException $e){
-                return $this->json("",$e->getError(),401);
+                return  $this->json("",401,$e->getError());
             }
             $data['status']=1;
             $obj=\app\api\model\AdminUser::create($data);
@@ -486,7 +486,7 @@ class User extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminUser.edit');
             }catch (ValidateException $e){
-                return $this->json("",$e->getError(),401);
+                 return $this->json("",401,$e->getError());
             }
             if(!$id) return $this->json("","重要参数丢失",401);
             if(isset($data['username'])) unset($data['username']);
@@ -583,6 +583,76 @@ class User extends \app\api\controller\Auto
         }
     }
 
+
+    /**
+     * @OA\Post(
+     *     tags={"admin"},
+     *     path=".user/resetpw",
+     *     summary="重置密码，超级管理员可以重置所有人的密码，用户ID为1的用户为超级管理员，非常超级管理员只能重置自己的密码",
+     *     @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 example={"password":"123456","uid":"5","token":"ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUo5LmV5SjFhV1FpT2pFc0luUnBiV1VpT2pFMU9EUTFNVGt4TmpCOS5iNjF3cEFoUFFVWE9FdnhtZ0dmUF9jaWFkNm9OUmlZcTRYRUtJNXRCajl3"}
+     *             )
+     *         ),
+     *
+     *     description="password:新密码，uid:重置密码的用户ID"
+     *     ),
+
+    @OA\Response(
+    response=200,
+    description="正常；请求已完成"
+    ),
+    @OA\Response(
+    response=204,
+    description="正常；无响应 — 已接收请求，但不存在要回送的信息"
+    ),
+
+    @OA\Response(
+    response=302,
+    description="已找到 — 请求的数据临时具有不同 URI",
+    ),
+    @OA\Response(
+    response=401,
+    description="未授权 — 未授权客户机访问数据"
+    ),
+    @OA\Response(
+    response=404,
+    description="找不到 — 服务器找不到给定的资源；文档不存在"
+    ),
+
+    @OA\Response(
+    response=500,
+    description="服务器错误"
+    ),
+     * )
+     */
+
+
+    public function resetpw()
+    {
+
+        if($this->request->isPost()){
+
+            $data=$this->request->post();
+            if($this->_uid!=$data['uid'] && $this->_uid!=1)  return $this->json("",403,"越权修改，无法完成");
+            try{
+                $this->validate($data, 'AdminUser.reset');
+            }catch (ValidateException $e){
+                return $this->json("",401,$e->getError());
+            }
+            $pw=password_hash((string)trim($data['password']),PASSWORD_BCRYPT);
+            $res=AdminUser::where('id',$data['uid'])->update(['password'=>$pw]);
+            if($res!==false){
+                return $this->json("",200,"操作成功");
+            }else{
+                return $this->json("",500,"服务器错误");
+            }
+
+        }
+        return $this->json("",403,"退出失败");
+    }
 
     /**
      * @OA\Post(
