@@ -4,3 +4,4 @@
 *.log
 /runtime
 /public/storage
+/public/doc/document.yaml
