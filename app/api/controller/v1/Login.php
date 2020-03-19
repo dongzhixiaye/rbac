@@ -2,6 +2,7 @@
 
 namespace app\api\controller\v1;
 
+use app\api\model\AdminRole;
 use app\api\model\LoginRecord;
 use Firebase\JWT\JWT;
 use think\Cache;
@@ -92,6 +93,12 @@ class Login extends \app\api\controller\Common
                     'last_login_time'=>$res->last_login_time,
                     'ava'=>$res->ava,
                 ];
+
+                #权限菜单保存
+                if(config('app.auth_power_validate') && $rtn['role']){
+                    $menu=AdminRole::getUserPower($rtn['role']);
+                    cache($res['id'].'_power',$menu,config('app.maintain_login_time'));//保存当前用户权限
+                }
                 cache($res['id'].'_info',$rtn,config('app.maintain_login_time'));
                 if(empty($rtn['ava'])) $rtn['ava']['path']=config('app.server_url').'/static/api/img/avatar.png';
                 return $this->json($rtn,200,"登录成功");

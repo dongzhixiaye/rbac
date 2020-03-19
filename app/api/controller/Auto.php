@@ -9,6 +9,7 @@
 namespace app\api\controller;
 
 
+use app\api\model\AdminRole;
 use app\api\model\VisitRecord;
 use app\BaseController;
 use app\common\model\Handle;
@@ -53,13 +54,22 @@ class Auto extends Common
             }catch (\Exception $e){
                 json_return("",401,'token异常，请检查token，或者重新获取');
             }
-
             //验证签名是否合法，验证数据完整性
-            if(config('auth_power_validate')){
-                //TODO-权限验证
+            if(config('app.auth_power_validate')){
+                if(!in_array($this->_uid,config('app.super_admin'))){
+                    $power=cache($this->_uid.'_power');
+                    if(empty($power)) json_return("",403,'无权访问');
+                    $path=$_SERVER['PATH_INFO'];
+                    $path=str_replace('/api/','',$path);
+                    if(!in_array($path,$power)) json_return("",403,'无权访问');
+                }
             }
 
         }
+
+
+
+
         //记录访问记录
 //        if(config('visit_record') ){
         if(config('app.visit_record') && strtoupper($_SERVER['REQUEST_METHOD'])!='OPTIONS'){

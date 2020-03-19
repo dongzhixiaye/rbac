@@ -11,6 +11,7 @@ return [
    'maintain_login_time'=>7*1*24*3600,// 登录有效期
    'visit_record'=>true,// 操作记录
    'page_num'=>20,// 操作记录
+    'super_admin'=>[1],
     //上传配置
     'uploads'=>[
         'repeat_uploads'=>false,//是否禁止重复上传true禁止，false 为允许

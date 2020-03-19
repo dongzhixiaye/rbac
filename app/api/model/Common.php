@@ -26,10 +26,11 @@ class Common extends Model
         }else{
             $data=request()->get();
         }
+        if(isset($data['token'])) unset($data['token']);
         $field=self::getTableFields();
         $map=[];
-        if(in_array('status',$field,true)) $map[]=['status','=',1];
-        if(in_array('trash',$field,true)) $map['trash']=['trash','=',0];
+//        if(in_array('status',$field,true)) $map[]=['status','=',1];
+        if(in_array('trash',$field,true)) $map[]=['trash','=',0];
         if($search){
             foreach ($data as $key=>$val){
                 if(in_array($key,$ignore,true)) continue;
@@ -44,13 +45,15 @@ class Common extends Model
 //                                $map[$key]=$val;
                                 continue;
                             }
-                            if(is_numeric($val)){//如果是数字，就不模糊查询
-                                $map[$key]=[$key,'=',$val];
-//                                $map[$key]=$val;
-                            }else{
-//                                 $map[]=[$key,'LIKE',"%{$val}%"];// 如果是文本就模糊查询
-                                $map[]=[$key,'LIKE',"%{$val}%"];// 如果是文本就模糊查询
-                            }
+
+                            $map[]=[$key,'LIKE',"%{$val}%"];// 如果是文本就模糊查询
+//                            if(is_numeric($val)){//如果是数字，就不模糊查询
+//                                $map[$key]=[$key,'=',$val];
+////                                $map[$key]=$val;
+//                            }else{
+////                                 $map[]=[$key,'LIKE',"%{$val}%"];// 如果是文本就模糊查询
+//                                $map[]=[$key,'LIKE',"%{$val}%"];// 如果是文本就模糊查询
+//                            }
                         }
                     }
                 }
@@ -62,7 +65,6 @@ class Common extends Model
     }
 
     public static function handleArr($key,$val,&$data){
-
         if(strpos($key,'time')!==false){//判断是时间就需要处理时间
             $start=isset($val[0]) ? trim($val[0]) : '';
             $end=isset($val[1])? trim($val[1]) : '';
@@ -88,6 +90,26 @@ class Common extends Model
         $field=self::getTableFields();
         if(!in_array($key,$field,true)) $key="id";
         return "{$key} {$type}";
+    }
+
+    public static function _tree($list){
+        $rtn=[];
+
+        if(!empty($list)){
+            foreach ($list as $key=>$value){
+                $list[$key]['list']=[];
+            }
+            foreach ($list as $key=>$val){
+                if(isset($list[$val['pid']])){
+
+                    $list[$val['pid']]['list'][]=&$list[$val['id']];//通过引用传递，不停把自己添加到父级中
+                }else{
+                    $rtn[]=&$list[$val['id']];//通过引用传递吧，数据结构，放到树中
+                }
+            }
+
+        }
+        return $rtn;
     }
 
 
