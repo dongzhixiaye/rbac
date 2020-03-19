@@ -5,7 +5,7 @@
 
 return [
    'jwt_key'=>'newairgroup_0317',//token 秘钥
-   'open_token_auth'=>true,//是否验证
+   'open_token_auth'=>false,//是否验证
    'auth_power_validate'=>true,//是否权限验证
    'server_url'=>"http://marketing.api.newairtek.com",//是否验证
    'maintain_login_time'=>7*1*24*3600,// 登录有效期
