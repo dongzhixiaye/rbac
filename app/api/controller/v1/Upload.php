@@ -88,9 +88,9 @@ class Upload extends \app\api\controller\Auto
             $insert=[];
             //保存文件
             $files=$this->request->file();
-            if(empty($files)){
-                return $this->json($this->request->post(),'400',"无法获取文件");
-            }
+//            if(empty($files)){
+//                return $this->json($this->request->post(),'400',"无法获取文件");
+//            }
             try {
                 validate(['image'=>$validate])
                     ->check($files);
