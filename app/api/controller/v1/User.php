@@ -340,7 +340,7 @@ class User extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminUser');
             }catch (ValidateException $e){
-                return  $this->json("",401,$e->getError());
+                return  $this->json("",400,$e->getError());
             }
             $data['status']=1;
             $obj=\app\api\model\AdminUser::create($data);
@@ -485,7 +485,7 @@ class User extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminUser.edit');
             }catch (ValidateException $e){
-                 return $this->json("",401,$e->getError());
+                 return $this->json("",400,$e->getError());
             }
             if(!$id) return $this->json("","重要参数丢失",401);
             if(isset($data['username'])) unset($data['username']);
@@ -639,7 +639,7 @@ class User extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminUser.reset');
             }catch (ValidateException $e){
-                return $this->json("",401,$e->getError());
+                return $this->json("",400,$e->getError());
             }
             $pw=password_hash((string)trim($data['password']),PASSWORD_BCRYPT);
             $res=AdminUser::where('id',$data['uid'])->update(['password'=>$pw]);

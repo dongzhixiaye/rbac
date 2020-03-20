@@ -204,7 +204,7 @@ class Menu extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminMenu');
             }catch (ValidateException $e){
-                return  $this->json("",401,$e->getError());
+                return  $this->json("",400,$e->getError());
             }
             $data['status']=1;
             $data['uid']=$this->_uid;
@@ -350,7 +350,7 @@ class Menu extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminMenu.edit');
             }catch (ValidateException $e){
-                 return $this->json("",401,$e->getError());
+                 return $this->json("",400,$e->getError());
             }
             if(!$id) return $this->json("","重要参数丢失",401);
             $affect=\app\api\model\AdminMenu::update($data);

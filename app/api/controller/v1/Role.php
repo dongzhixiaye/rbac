@@ -175,7 +175,7 @@ class Role extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminRole');
             }catch (ValidateException $e){
-                return  $this->json("",401,$e->getError());
+                return  $this->json("",400,$e->getError());
             }
             $data['status']=1;
             $obj=\app\api\model\AdminRole::create($data);
@@ -329,7 +329,7 @@ class Role extends \app\api\controller\Auto
             try{
                 $this->validate($data, 'AdminRole.edit');
             }catch (ValidateException $e){
-                 return $this->json("",401,$e->getError());
+                 return $this->json("",400,$e->getError());
             }
             $affect=\app\api\model\AdminRole::update($data);
             if($affect!==false){

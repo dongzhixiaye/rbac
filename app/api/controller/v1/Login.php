@@ -67,7 +67,7 @@ class Login extends \app\api\controller\Common
             try{
                 $this->validate($data, 'AdminUser.login');
             }catch (ValidateException $e){
-                return $this->json($e->getError(),401);
+                return $this->json("",400,$e->getError());
             }
             $username=trim($data['username']);
             $res=\app\api\model\AdminUser::with('ava')->where('email',$username)->where('trash',0)->whereOr('username',$username)->whereOr('mobile',$username)->find();
