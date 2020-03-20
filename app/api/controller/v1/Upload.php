@@ -88,6 +88,9 @@ class Upload extends \app\api\controller\Auto
             $insert=[];
             //保存文件
             $files=$this->request->file();
+
+            json_return($_FILES,'200','人会');
+
             try {
                 validate(['image'=>$validate])
                     ->check($files);
